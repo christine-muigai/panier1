@@ -1,24 +1,13 @@
-import { useNavigate } from 'react-router-dom';
-
 export default function ProductCard({ product }) {
-  const navigate = useNavigate();
-
   return (
-    <div className="bg-white shadow-md rounded-xl overflow-hidden p-4 flex flex-col justify-between">
-      <img
-        src={product.image}
-        alt={product.name}
-        className="w-full h-40 object-cover rounded-md mb-4"
-      />
-      <h3 className="font-semibold text-lg">{product.name}</h3>
-      <p className="text-gray-600 text-sm mt-1 mb-2 capitalize">{product.category}</p>
-      <div className="font-bold text-green-700 mb-4">${product.price.toFixed(2)}</div>
-      <button
-        onClick={() => navigate('/checkout')}
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-      >
-        Buy Now
+    <div className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition p-4 bg-white">
+      <img src={product.image} alt={product.name} className="w-full h-48 object-cover mb-4 rounded" />
+      <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
+      <p className="text-gray-600 mb-2">${product.price}</p>
+      <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+        Add to Cart
       </button>
     </div>
   );
 }
+
