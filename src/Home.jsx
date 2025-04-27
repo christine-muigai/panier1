@@ -35,6 +35,21 @@ export default function Home() {
         >
           Dairy
         </Link>
+        <Link 
+          to="/category/meat" 
+          className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+          ></Link>
+          Meat
+        <Link
+          to="/category/seafood" 
+          className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+          ></Link>
+          Seafood
+        <Link
+          to="/category/bakery" 
+          className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+          ></Link>
+          Bakery
       </div>
     </div>
   );

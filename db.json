@@ -251,139 +251,57 @@
             "name": "Zucchini",
             "category": "vegetables",
             "price": 2.0,
-            "image": "https://example.com/zucchini.jpg"
+            "image": "https://www.allrecipes.com/thmb/xkybcCdsXKxe46LB9v4e4AV28oo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/AR-zucchini-basket-4x3-e6aba860035443a1b0a885d2d941ef6a.jpg"
         },
         {
             "id": 22,
             "name": "Pumpkin",
             "category": "vegetables",
             "price": 3.5,
-            "image": "https://example.com/pumpkin.jpg"
+            "image": "https://www.melissas.com/cdn/shop/files/image-of-baby-pumpkins-vegetables-1125636652.jpg?v=1738790197"
         },
         {
             "id": 23,
             "name": "Sweet Potatoes",
             "category": "vegetables",
             "price": 2.5,
-            "image": "https://example.com/sweet_potatoes.jpg"
+            "image": "https://c.ndtvimg.com/gws/ms/health-benefits-of-sweet-potatoes/assets/5.png"
         },
         {
             "id": 24,
             "name": "Onions",
             "category": "vegetables",
             "price": 1.0,
-            "image": "https://example.com/onions.jpg"
+            "image": "https://giadzy.com/cdn/shop/articles/dreamstime_l_46136908-scaled.jpg?v=1653284048"
         },
         {
             "id": 25,
             "name": "Garlic",
             "category": "vegetables",
             "price": 1.5,
-            "image": "https://example.com/garlic.jpg"
+            "image": "https://post.healthline.com/wp-content/uploads/2018/06/garlic-1296x728-header.jpg"
         },
         {
             "id": 26,
             "name": "Cauliflower",
             "category": "vegetables",
             "price": 3.0,
-            "image": "https://example.com/cauliflower.jpg"
+            "image": "https://snaped.fns.usda.gov/sites/default/files/styles/crop_ratio_7_5/public/seasonal-produce/2018-05/cauliflower.jpg.webp?itok=bkbqZWhp"
         },
-        {
-            "id": 27,
-            "name": "Eggplant",
-            "category": "vegetables",
-            "price": 2.5,
-            "image": "https://example.com/eggplant.jpg"
-        },
-        {
-            "id": 28,
-            "name": "Radishes",
-            "category": "vegetables",
-            "price": 1.5,
-            "image": "https://example.com/radishes.jpg"
-        },
-        {
-            "id": 29,
-            "name": "Asparagus",
-            "category": "vegetables",
-            "price": 4.0,
-            "image": "https://example.com/asparagus.jpg"
-        },
-        {
-            "id": 30,
-            "name": "Celery",
-            "category": "vegetables",
-            "price": 1.5,
-            "image": "https://example.com/celery.jpg"
-        },
-        {
-            "id": 31,
-            "name": "Green Beans",
-            "category": "vegetables",
-            "price": 2.0,
-            "image": "https://example.com/green_beans.jpg"
-        },
-        {
-            "id": 32,
-            "name": "Peas",
-            "category": "vegetables",
-            "price": 2.5,
-            "image": "https://example.com/peas.jpg"
-        },
-        
         {
             "id": 35,
             "name": "Kale",
             "category": "vegetables",
             "price": 3.0,
-            "image": "https://example.com/kale.jpg"
+            "image": "https://healthyfamilyproject.com/wp-content/uploads/2020/05/Kale-background.jpg"
         },
-        
         
         {
             "id": 38,
             "name": "Cabbage",
             "category": "vegetables",
             "price": 1.5,
-            "image": "https://example.com/cabbage.jpg"
-        },
-        {
-            "id": 39,
-            "name": "Brussels Sprouts",
-            "category": "vegetables",
-            "price": 4.0,
-            "image": "https://example.com/brussels_sprouts.jpg"
-        },
-        {
-            "id": 40,
-            "name": "Artichokes",
-            "category": "vegetables",
-            "price": 3.5,
-            "image": "https://example.com/artichokes.jpg"
-        },
-        {
-            "id": 41,
-            "name": "Radicchio",
-            "category": "vegetables",
-            "price": 2.0,
-            "image": "https://example.com/radicchio.jpg"
-        },
-        
-        {
-            "id": 31,
-            "name": "Peaches",
-            "category": "fruits",
-            "price": 4.5,
-            "image": "https://example.com/peaches.jpg"
-        },
-       
-        
-        {
-            "id": 37,
-            "name": "Wheat Bran",
-            "category": "cereals",
-            "price": 2.5,
-            "image": "https://example.com/wheat_bran.jpg"
+            "image": "https://www.growingproduce.com/wp-content/uploads/2024/09/3610-Cabbage-Bejo_gallery-849x576.jpg"
         },
          
       {
@@ -391,91 +309,85 @@
             "name": "Soy Milk",
             "category": "dairy",
             "price": 3.0,
-            "image": "https://example.com/soy_milk.jpg"
+            "image": "https://assets.bonappetit.com/photos/5b2d3fd55ebfc15cdca6fe97/1:1/w_3371,h_3371,c_limit/healthyish-soy-milk.jpg"
         },
-        {
-            "id": 45,
-            "name": "Greek Yogurt",
-            "category": "dairy",
-            "price": 4.0,
-            "image": "https://example.com/greek_yogurt.jpg"
-        },
+        
         {
             "id": 46,
             "name": "Rice Krispies",
             "category": "cereals",
             "price": 3.5,
-            "image": "https://example.com/rice_krispies.jpg"
+            "image": "https://m.media-amazon.com/images/I/81ZanmDbk+L._AC_UF894,1000_QL80_.jpg"
         },
         {
             "id": 47,
             "name": "Beef",
             "category": "meat",
             "price": 10.0,
-            "image": "https://example.com/beef.jpg"
+            "image": "https://cdn.britannica.com/68/143268-050-917048EA/Beef-loin.jpg"
         },
         {
             "id": 48,
             "name": "Pork",
             "category": "meat",
             "price": 8.5,
-            "image": "https://example.com/pork.jpg"
+            "image": "https://www.lovefoodhatewaste.com/sites/default/files/styles/16_9_two_column/public/2022-08/Pork-sh1419942758.jpg.webp?itok=_Ow0IXe6"
         },
         {
             "id": 49,
             "name": "Lamb",
             "category": "meat",
             "price": 12.0,
-            "image": "https://example.com/lamb.jpg"
+            "image": "https://www.lovefoodhatewaste.com/sites/default/files/styles/twitter_card_image/public/2022-08/Lamb-chops-Sh125602871.jpg.webp?itok=R6uUglLg"
         },
         {
             "id": 50,
             "name": "Salmon",
             "category": "seafood",
             "price": 15.0,
-            "image": "https://example.com/salmon.jpg"
+            "image": "https://pacificbay.com.ph/cdn/shop/products/salmon-sashimi-chilled-701240.jpg?v=1626937441&width=1000&height=1000"
         },
         {
             "id": 51,
             "name": "Shrimp",
             "category": "seafood",
             "price": 18.0,
-            "image": "https://example.com/shrimp.jpg"
+            "image": "https://www.cuisineryfoodmarket.com/cdn/shop/files/H56617WildMediterraneanRedShrimpLARGE.jpg?v=1692641759&width=480&height=480"
         },
         {
             "id": 52,
             "name": "Crab",
             "category": "seafood",
             "price": 20.0,
-            "image": "https://example.com/crab.jpg"
+            "image": "https://cdn.shopify.com/s/files/1/1616/6285/files/scc-seafood-plated-018.jpg?v=1670528820"
         },
         {
             "id": 53,
             "name": "Croissant",
             "category": "bakery",
             "price": 2.5,
-            "image": "https://example.com/croissant.jpg"
+            "image": "https://cdn.cheapism.com/images/Croissant.2e16d0ba.fill-1440x605.png"
         },
         {
             "id": 54,
             "name": "Baguette",
             "category": "bakery",
             "price": 3.0,
-            "image": "https://example.com/baguette.jpg"
+            "image": "https://standardbakingco.com/wp-content/uploads/2022/04/baguette-tripple-view-portland-maine.jpg"
         },
         {
             "id": 55,
             "name": "Muffin",
             "category": "bakery",
             "price": 2.0,
-            "image": "https://example.com/muffin.jpg"
+            "image": "https://www.partstown.com/about-us/wp-content/uploads/2022/10/Most-Profitable-Baked-Goods-for-Bakeries-Muffins.jpg"
         },
         {
             "id": 56,
             "name": "Donut",
             "category": "bakery",
             "price": 1.5,
-            "image": "https://example.com/donut.jpg"
+            "image":"https://d12oja0ew7x0i8.cloudfront.net/images/Article_Images/ImageForArticle_19384_15924910939757563.png"
         }
       ]
   }
