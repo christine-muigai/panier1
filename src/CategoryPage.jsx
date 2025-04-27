@@ -7,14 +7,18 @@ export default function CategoryPage() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/products?category=${category}`)
+    fetch('http://localhost:3000/products')
       .then((res) => res.json())
-      .then((data) => setProducts(data))
+      .then((data) => {
+        console.log('All products:', data);
+        const filteredProducts = data.filter((product) => product.category === category);
+        setProducts(filteredProducts);
+      })
       .catch((error) => {
         console.error('Error fetching products:', error);
         setProducts([]);
       });
-  }, [category]);
+  }, [category]); 
 
   return (
     <div className="p-8">
