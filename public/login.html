@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | PanierVert</title>
   <script type="module" src="/firebase.js"></script>
-
   <style>
     /* MAIN STYLES */
     body {
@@ -108,6 +107,7 @@
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
+      margin-top: 1rem;
     }
 
     .google-btn:hover {
@@ -126,6 +126,7 @@
       color: #2e7d32;
       font-weight: 500;
       cursor: pointer;
+      text-decoration: underline;
     }
 
     /* ERROR STYLES */
@@ -137,12 +138,18 @@
       margin-bottom: 1rem;
       display: none;
     }
+
+    /* VISIBILITY FIXES */
+    .auth-card {
+      display: block !important;
+    }
+    #auth-container {
+      display: block !important;
+    }
   </style>
 </head>
-
 <body>
   <div id="auth-container">
-    <!-- Login Card Loaded Initially -->
     <div class="auth-card">
       <div class="auth-header">
         <h1 class="auth-title">Welcome to PanierVert</h1>
@@ -172,12 +179,8 @@
     </div>
   </div>
 
-  <!-- JavaScript -->
   <script type="module">
-    import { auth, handleGoogleLogin, handleEmailLogin, handleEmailSignUp } from '/firebase.js';
-    import { onAuthStateChanged } from "firebase/auth";
-
-    const authContainer = document.getElementById('auth-container');
+    import { auth, handleGoogleLogin, handleEmailLogin, handleEmailSignUp, onAuthStateChanged } from '/firebase.js';
 
     function showError(message) {
       const errorEl = document.getElementById('auth-error');
@@ -185,70 +188,9 @@
         errorEl.textContent = message;
         errorEl.style.display = 'block';
         setTimeout(() => {
-          if (errorEl) errorEl.style.display = 'none';
+          errorEl.style.display = 'none';
         }, 4000);
       }
-    }
-
-    function loadLoginForm() {
-      authContainer.innerHTML = `
-        <div class="auth-card">
-          <div class="auth-header">
-            <h1 class="auth-title">Welcome to PanierVert</h1>
-          </div>
-          <div class="auth-body">
-            <div id="auth-error" class="auth-error"></div>
-            <form id="login-form" class="auth-form">
-              <div class="form-group">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" id="email" class="form-input" required>
-              </div>
-              <div class="form-group">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" id="password" class="form-input" required>
-              </div>
-              <button type="submit" class="auth-btn">Sign In</button>
-            </form>
-
-            <button id="google-login" class="auth-btn google-btn">
-              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google logo">
-              Continue with Google
-            </button>
-          </div>
-          <div class="auth-footer">
-            Don't have an account? <span id="toggle-auth" class="auth-toggle">Sign up</span>
-          </div>
-        </div>
-      `;
-      setupLoginListeners();
-    }
-
-    function loadSignupForm() {
-      authContainer.innerHTML = `
-        <div class="auth-card">
-          <div class="auth-header">
-            <h1 class="auth-title">Create Account</h1>
-          </div>
-          <div class="auth-body">
-            <div id="auth-error" class="auth-error"></div>
-            <form id="signup-form" class="auth-form">
-              <div class="form-group">
-                <label for="signup-email" class="form-label">Email</label>
-                <input type="email" id="signup-email" class="form-input" required>
-              </div>
-              <div class="form-group">
-                <label for="signup-password" class="form-label">Password</label>
-                <input type="password" id="signup-password" class="form-input" required>
-              </div>
-              <button type="submit" class="auth-btn">Create Account</button>
-            </form>
-          </div>
-          <div class="auth-footer">
-            Already have an account? <span id="toggle-auth" class="auth-toggle">Sign in</span>
-          </div>
-        </div>
-      `;
-      setupSignupListeners();
     }
 
     function setupLoginListeners() {
@@ -256,58 +198,120 @@
       const googleBtn = document.getElementById('google-login');
       const toggleAuth = document.getElementById('toggle-auth');
 
-      loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        try {
-          await handleEmailLogin(email, password);
-        } catch (error) {
-          showError(error.message || "Login failed");
-        }
-      });
+      if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+          try {
+            await handleEmailLogin(email, password);
+          } catch (error) {
+            showError(error.message);
+          }
+        });
+      }
 
-      googleBtn.addEventListener('click', async () => {
-        try {
-          await handleGoogleLogin();
-        } catch (error) {
-          showError(error.message || "Google login failed");
-        }
-      });
+      if (googleBtn) {
+        googleBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          try {
+            await handleGoogleLogin();
+          } catch (error) {
+            showError(error.message);
+          }
+        });
+      }
 
-      toggleAuth.addEventListener('click', () => {
-        loadSignupForm();
-      });
+      if (toggleAuth) {
+        toggleAuth.addEventListener('click', () => {
+          document.getElementById('auth-container').innerHTML = `
+            <div class="auth-card">
+              <div class="auth-header">
+                <h1 class="auth-title">Create Account</h1>
+              </div>
+              <div class="auth-body">
+                <div id="auth-error" class="auth-error"></div>
+                <form id="signup-form" class="auth-form">
+                  <div class="form-group">
+                    <label for="signup-email" class="form-label">Email</label>
+                    <input type="email" id="signup-email" class="form-input" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="signup-password" class="form-label">Password</label>
+                    <input type="password" id="signup-password" class="form-input" required>
+                  </div>
+                  <button type="submit" class="auth-btn">Create Account</button>
+                </form>
+              </div>
+              <div class="auth-footer">
+                Already have an account? <span id="toggle-auth" class="auth-toggle">Sign in</span>
+              </div>
+            </div>
+          `;
+          setupSignupListeners();
+        });
+      }
     }
 
     function setupSignupListeners() {
       const signupForm = document.getElementById('signup-form');
       const toggleAuth = document.getElementById('toggle-auth');
 
-      signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        try {
-          await handleEmailSignUp(email, password);
-        } catch (error) {
-          showError(error.message || "Signup failed");
-        }
-      });
+      if (signupForm) {
+        signupForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('signup-email').value;
+          const password = document.getElementById('signup-password').value;
+          try {
+            await handleEmailSignUp(email, password);
+          } catch (error) {
+            showError(error.message);
+          }
+        });
+      }
 
-      toggleAuth.addEventListener('click', () => {
-        loadLoginForm();
-      });
+      if (toggleAuth) {
+        toggleAuth.addEventListener('click', () => {
+          document.getElementById('auth-container').innerHTML = `
+            <div class="auth-card">
+              <div class="auth-header">
+                <h1 class="auth-title">Welcome to PanierVert</h1>
+              </div>
+              <div class="auth-body">
+                <div id="auth-error" class="auth-error"></div>
+                <form id="login-form" class="auth-form">
+                  <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" required>
+                  </div>
+                  <button type="submit" class="auth-btn">Sign In</button>
+                </form>
+                <button id="google-login" class="auth-btn google-btn">
+                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google logo">
+                  Continue with Google
+                </button>
+              </div>
+              <div class="auth-footer">
+                Don't have an account? <span id="toggle-auth" class="auth-toggle">Sign up</span>
+              </div>
+            </div>
+          `;
+          setupLoginListeners();
+        });
+      }
     }
 
-    // Listen if user is already logged in
+    // Initialize
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        window.location.href = 'index.html';
+        window.location.href = '/index.html';
       }
     });
 
-    // Initialize login page listeners
     setupLoginListeners();
   </script>
 </body>

@@ -5,6 +5,19 @@
     <link rel="icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PanierVert</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      #root {
+        min-height: 100vh;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
@@ -15,8 +28,10 @@
       import { onAuthStateChanged } from "firebase/auth";
       
       onAuthStateChanged(auth, (user) => {
-        if (!user) {
+        if (!user && window.location.pathname !== '/login.html') {
           window.location.href = '/login.html';
+        } else if (user && window.location.pathname === '/login.html') {
+          window.location.href = '/';
         }
       });
     </script>

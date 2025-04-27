@@ -18,24 +18,25 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_MEASUREMENT_ID
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// Auth Functions
-export async function handleGoogleLogin() {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    return result.user;
-  } catch (error) {
-    throw formatAuthError(error);
+function formatAuthError(error) {
+  switch (error.code) {
+    case 'auth/invalid-email': return new Error('Invalid email address');
+    case 'auth/user-disabled': return new Error('Account disabled');
+    case 'auth/user-not-found':
+    case 'auth/wrong-password': return new Error('Invalid email or password');
+    case 'auth/email-already-in-use': return new Error('Email already in use');
+    case 'auth/weak-password': return new Error('Password should be at least 6 characters');
+    default: return new Error('Authentication failed. Please try again.');
   }
 }
 
-export async function handleEmailSignUp(email, password) {
+export async function handleGoogleLogin() {
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
+    return await signInWithPopup(auth, provider);
   } catch (error) {
     throw formatAuthError(error);
   }
@@ -43,29 +44,18 @@ export async function handleEmailSignUp(email, password) {
 
 export async function handleEmailLogin(email, password) {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    return await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     throw formatAuthError(error);
   }
 }
 
-// Error Formatter
-export function formatAuthError(error) {
-  const errorMap = {
-    'auth/email-already-in-use': 'This email is already registered',
-    'auth/invalid-email': 'Invalid email address',
-    'auth/weak-password': 'Password must be at least 6 characters',
-    'auth/user-not-found': 'No account found with this email',
-    'auth/wrong-password': 'Incorrect password',
-    'auth/popup-closed-by-user': 'Sign in cancelled by user',
-    'auth/network-request-failed': 'Network error occurred'
-  };
-  
-  return new Error(errorMap[error.code] || 'Authentication failed. Please try again.');
+export async function handleEmailSignUp(email, password) {
+  try {
+    return await createUserWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    throw formatAuthError(error);
+  }
 }
 
-// Export everything needed
-export { 
-  auth,
-  onAuthStateChanged
-};
+export { auth, onAuthStateChanged };
