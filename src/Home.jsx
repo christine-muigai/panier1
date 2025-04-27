@@ -38,18 +38,24 @@ export default function Home() {
         <Link 
           to="/category/meat" 
           className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
-          ></Link>
+          >
           Meat
+          </Link>
+         
         <Link
           to="/category/seafood" 
           className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
-          ></Link>
+          >
           Seafood
+          </Link>
+          
         <Link
           to="/category/bakery" 
           className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
-          ></Link>
+        >
           Bakery
+        </Link>
+          
       </div>
     </div>
   );
