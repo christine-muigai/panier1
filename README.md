@@ -31,28 +31,48 @@ JSON Server (for mock API)
 Clone the repository
 ## 1
 bash
+
 Copy
+
 Edit
+
 git clone https://github.com/christine-muigai/panier1.git
+
 cd paniervert
+
 Install dependencies
+
 ## 2
 bash
+
 Copy
+
 Edit
+
 npm install
+
 Start JSON Server (for product data)
+
 ## 3
 bash
+
 Copy
+
 Edit
+
 npx json-server --watch db.json --port 3001
+
 Start the development server
+
 ## 4
 bash
+
 Copy
+
 Edit
+
 npm run dev
+
 Access the application
 
 ## License
