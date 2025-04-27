@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | PanierVert</title>
   <script type="module" src="/firebase.js"></script>
+  
   <style>
     /* MAIN STYLES */
     body {
@@ -17,13 +18,13 @@
       align-items: center;
       min-height: 100vh;
     }
-    
+
     #auth-container {
       width: 100%;
       max-width: 420px;
       padding: 2rem;
     }
-    
+
     /* CARD STYLES */
     .auth-card {
       background: white;
@@ -31,7 +32,7 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.08);
       overflow: hidden;
     }
-    
+
     /* HEADER STYLES */
     .auth-header {
       background: #2e7d32;
@@ -39,35 +40,35 @@
       padding: 1.5rem;
       text-align: center;
     }
-    
+
     .auth-title {
       margin: 0;
       font-weight: 600;
       font-size: 1.5rem;
     }
-    
+
     /* FORM STYLES */
     .auth-body {
       padding: 2rem;
     }
-    
+
     .auth-form {
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
     }
-    
+
     .form-group {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
     }
-    
+
     .form-label {
       font-weight: 500;
       color: #495057;
     }
-    
+
     .form-input {
       padding: 0.75rem 1rem;
       border: 1px solid #ced4da;
@@ -75,13 +76,13 @@
       font-size: 1rem;
       transition: all 0.2s;
     }
-    
+
     .form-input:focus {
       border-color: #2e7d32;
       box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.25);
       outline: none;
     }
-    
+
     /* BUTTON STYLES */
     .auth-btn {
       background: #2e7d32;
@@ -94,11 +95,11 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    
+
     .auth-btn:hover {
       background: #1b5e20;
     }
-    
+
     .google-btn {
       background: white;
       color: #495057;
@@ -108,11 +109,11 @@
       justify-content: center;
       gap: 0.75rem;
     }
-    
+
     .google-btn:hover {
       background: #f8f9fa;
     }
-    
+
     /* FOOTER STYLES */
     .auth-footer {
       text-align: center;
@@ -120,13 +121,13 @@
       border-top: 1px solid #e9ecef;
       color: #6c757d;
     }
-    
+
     .auth-toggle {
       color: #2e7d32;
       font-weight: 500;
       cursor: pointer;
     }
-    
+
     /* ERROR STYLES */
     .auth-error {
       color: #dc3545;
@@ -138,141 +139,144 @@
     }
   </style>
 </head>
+
 <body>
   <div id="auth-container">
+    <!-- Default: Login Form -->
     <div class="auth-card">
       <div class="auth-header">
         <h1 class="auth-title">Welcome to PanierVert</h1>
       </div>
-      
+
       <div class="auth-body">
         <div id="auth-error" class="auth-error"></div>
-        
+
         <form id="login-form" class="auth-form">
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
             <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
           </div>
-          
+
           <div class="form-group">
             <label for="password" class="form-label">Password</label>
             <input type="password" id="password" class="form-input" placeholder="••••••••" required>
           </div>
-          
+
           <button type="submit" class="auth-btn">Sign In</button>
         </form>
-        
+
         <button id="google-login" class="auth-btn google-btn">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google logo">
           Continue with Google
         </button>
       </div>
-      
+
       <div class="auth-footer">
         Don't have an account? <span id="show-signup" class="auth-toggle">Sign up</span>
       </div>
     </div>
   </div>
 
+  <!-- JavaScript -->
   <script type="module">
-    import { 
-      auth, 
-      handleGoogleLogin, 
-      handleEmailLogin, 
-      handleEmailSignUp,
-      showAuthError
-    } from '/firebase.js';
+    import { auth, handleGoogleLogin, handleEmailLogin, handleEmailSignUp, formatAuthError } from '/firebase.js';
     import { onAuthStateChanged } from "firebase/auth";
-    
-    // DOM Elements
-    const loginForm = document.getElementById('login-form');
-    const googleBtn = document.getElementById('google-login');
-    const signupToggle = document.getElementById('show-signup');
+
     const authContainer = document.getElementById('auth-container');
     const errorEl = document.getElementById('auth-error');
-    
-    // Form switch handler
-    signupToggle.addEventListener('click', () => {
-      authContainer.innerHTML = `
-        <div class="auth-card">
-          <div class="auth-header">
-            <h1 class="auth-title">Create Account</h1>
-          </div>
-          
-          <div class="auth-body">
-            <div id="auth-error" class="auth-error"></div>
-            
-            <form id="signup-form" class="auth-form">
-              <div class="form-group">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" id="signup-email" class="form-input" placeholder="your@email.com" required>
-              </div>
-              
-              <div class="form-group">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" id="signup-password" class="form-input" placeholder="••••••••" required>
-              </div>
-              
-              <button type="submit" class="auth-btn">Create Account</button>
-            </form>
-          </div>
-          
-          <div class="auth-footer">
-            Already have an account? <span id="show-login" class="auth-toggle">Sign in</span>
-          </div>
-        </div>
-      `;
-      
-      document.getElementById('signup-form').addEventListener('submit', async (e) => {
+
+    function showError(message) {
+      errorEl.textContent = message;
+      errorEl.style.display = 'block';
+      setTimeout(() => errorEl.style.display = 'none', 4000);
+    }
+
+    function setupLoginForm() {
+      const loginForm = document.getElementById('login-form');
+      const googleBtn = document.getElementById('google-login');
+      const signupToggle = document.getElementById('show-signup');
+
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        try {
+          await handleEmailLogin(email, password);
+        } catch (error) {
+          showError(error.message || "Login failed");
+        }
+      });
+
+      googleBtn.addEventListener('click', async () => {
+        try {
+          await handleGoogleLogin();
+        } catch (error) {
+          showError(error.message || "Google login failed");
+        }
+      });
+
+      signupToggle.addEventListener('click', () => {
+        showSignupForm();
+      });
+    }
+
+    function setupSignupForm() {
+      const signupForm = document.getElementById('signup-form');
+      const loginToggle = document.getElementById('show-login');
+
+      signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('signup-email').value;
         const password = document.getElementById('signup-password').value;
         try {
           await handleEmailSignUp(email, password);
         } catch (error) {
-          showAuthError(error);
+          showError(error.message || "Signup failed");
         }
       });
-      
-      document.getElementById('show-login').addEventListener('click', () => {
-        window.location.reload();
+
+      loginToggle.addEventListener('click', () => {
+        location.reload();
       });
-    });
-    
-    // Login form handler
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      try {
-        await handleEmailLogin(email, password);
-      } catch (error) {
-        showAuthError(error);
-      }
-    });
-    
-    // Google login handler
-    googleBtn.addEventListener('click', async () => {
-      try {
-        await handleGoogleLogin();
-      } catch (error) {
-        showAuthError(error);
-      }
-    });
-    
-    // Auth state listener
+    }
+
+    function showSignupForm() {
+      authContainer.innerHTML = `
+        <div class="auth-card">
+          <div class="auth-header">
+            <h1 class="auth-title">Create Account</h1>
+          </div>
+          <div class="auth-body">
+            <div id="auth-error" class="auth-error"></div>
+            <form id="signup-form" class="auth-form">
+              <div class="form-group">
+                <label for="signup-email" class="form-label">Email</label>
+                <input type="email" id="signup-email" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="signup-password" class="form-label">Password</label>
+                <input type="password" id="signup-password" class="form-input" required>
+              </div>
+              <button type="submit" class="auth-btn">Create Account</button>
+            </form>
+          </div>
+          <div class="auth-footer">
+            Already have an account? <span id="show-login" class="auth-toggle">Sign in</span>
+          </div>
+        </div>
+      `;
+      setupSignupForm();
+    }
+
+    // Initialize login form when page loads
+    setupLoginForm();
+
+    // Redirect if already logged in
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        window.location.href = '/index.html';
+        window.location.href = 'index.html';
       }
     });
-    
-    // Error display function
-    window.showAuthError = function(error) {
-      errorEl.textContent = error.message || "Authentication failed";
-      errorEl.style.display = 'block';
-      setTimeout(() => errorEl.style.display = 'none', 5000);
-    };
   </script>
 </body>
 </html>
