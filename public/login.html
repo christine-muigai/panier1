@@ -5,196 +5,104 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | PanierVert</title>
   <script type="module" src="/firebase.js"></script>
-  
+  <script src="https://cdn.tailwindcss.com"></script> <!-- TailwindCSS CDN -->
+
   <style>
-    /* MAIN STYLES */
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f8f9fa;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    #auth-container {
-      width: 100%;
-      max-width: 420px;
-      padding: 2rem;
-    }
-
-    /* CARD STYLES */
-    .auth-card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-      overflow: hidden;
-    }
-
-    /* HEADER STYLES */
-    .auth-header {
-      background: #2e7d32;
-      color: white;
-      padding: 1.5rem;
-      text-align: center;
-    }
-
-    .auth-title {
-      margin: 0;
-      font-weight: 600;
-      font-size: 1.5rem;
-    }
-
-    /* FORM STYLES */
-    .auth-body {
-      padding: 2rem;
-    }
-
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .form-label {
-      font-weight: 500;
-      color: #495057;
-    }
-
-    .form-input {
-      padding: 0.75rem 1rem;
-      border: 1px solid #ced4da;
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: all 0.2s;
-    }
-
-    .form-input:focus {
-      border-color: #2e7d32;
-      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.25);
-      outline: none;
-    }
-
-    /* BUTTON STYLES */
-    .auth-btn {
-      background: #2e7d32;
-      color: white;
-      border: none;
-      padding: 0.75rem;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .auth-btn:hover {
-      background: #1b5e20;
-    }
-
-    .google-btn {
-      background: white;
-      color: #495057;
-      border: 1px solid #ced4da;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-    }
-
-    .google-btn:hover {
-      background: #f8f9fa;
-    }
-
-    /* FOOTER STYLES */
-    .auth-footer {
-      text-align: center;
-      padding: 1rem 2rem;
-      border-top: 1px solid #e9ecef;
-      color: #6c757d;
-    }
-
-    .auth-toggle {
-      color: #2e7d32;
-      font-weight: 500;
-      cursor: pointer;
-    }
-
-    /* ERROR STYLES */
-    .auth-error {
-      color: #dc3545;
-      background: #f8d7da;
-      padding: 0.75rem;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-      display: none;
+      background: #f8fafc;
     }
   </style>
 </head>
 
-<body>
-  <div id="auth-container">
-    <!-- Default: Login Form -->
-    <div class="auth-card">
-      <div class="auth-header">
-        <h1 class="auth-title">Welcome to PanierVert</h1>
-      </div>
-
-      <div class="auth-body">
-        <div id="auth-error" class="auth-error"></div>
-
-        <form id="login-form" class="auth-form">
-          <div class="form-group">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
-          </div>
-
-          <div class="form-group">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" id="password" class="form-input" placeholder="••••••••" required>
-          </div>
-
-          <button type="submit" class="auth-btn">Sign In</button>
-        </form>
-
-        <button id="google-login" class="auth-btn google-btn">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google logo">
-          Continue with Google
-        </button>
-      </div>
-
-      <div class="auth-footer">
-        Don't have an account? <span id="show-signup" class="auth-toggle">Sign up</span>
-      </div>
-    </div>
+<body class="min-h-screen flex items-center justify-center">
+  <div id="auth-container" class="w-full max-w-md px-6">
+    <!-- Content gets injected here by JS -->
   </div>
 
-  <!-- JavaScript -->
   <script type="module">
-    import { auth, handleGoogleLogin, handleEmailLogin, handleEmailSignUp, formatAuthError } from '/firebase.js';
+    import { auth, handleGoogleLogin, handleEmailLogin, handleEmailSignUp } from '/firebase.js';
     import { onAuthStateChanged } from "firebase/auth";
 
     const authContainer = document.getElementById('auth-container');
-    const errorEl = document.getElementById('auth-error');
 
     function showError(message) {
-      errorEl.textContent = message;
-      errorEl.style.display = 'block';
-      setTimeout(() => errorEl.style.display = 'none', 4000);
+      const errorEl = document.getElementById('auth-error');
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.remove('hidden');
+        setTimeout(() => {
+          if (errorEl) errorEl.classList.add('hidden');
+        }, 4000);
+      }
     }
 
-    function setupLoginForm() {
+    function loadLoginForm() {
+      authContainer.innerHTML = `
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div class="bg-green-700 p-6 text-center">
+            <h1 class="text-white text-2xl font-semibold">Welcome to PanierVert</h1>
+          </div>
+          <div class="p-6 space-y-4">
+            <div id="auth-error" class="hidden bg-red-100 text-red-600 p-3 rounded-lg text-sm"></div>
+            <form id="login-form" class="space-y-4">
+              <div>
+                <label class="block mb-1 font-medium text-gray-700">Email</label>
+                <input type="email" id="email" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+              </div>
+              <div>
+                <label class="block mb-1 font-medium text-gray-700">Password</label>
+                <input type="password" id="password" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+              </div>
+              <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-semibold">Sign In</button>
+            </form>
+
+            <button id="google-login" class="w-full flex items-center justify-center gap-3 border border-gray-300 py-2 rounded-lg font-semibold text-gray-700 hover:bg-gray-100">
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google logo">
+              Continue with Google
+            </button>
+          </div>
+          <div class="text-center py-4 text-gray-600">
+            Don't have an account? 
+            <span id="toggle-auth" class="text-green-700 font-semibold cursor-pointer hover:underline">Sign up</span>
+          </div>
+        </div>
+      `;
+      setupLoginListeners();
+    }
+
+    function loadSignupForm() {
+      authContainer.innerHTML = `
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div class="bg-green-700 p-6 text-center">
+            <h1 class="text-white text-2xl font-semibold">Create Account</h1>
+          </div>
+          <div class="p-6 space-y-4">
+            <div id="auth-error" class="hidden bg-red-100 text-red-600 p-3 rounded-lg text-sm"></div>
+            <form id="signup-form" class="space-y-4">
+              <div>
+                <label class="block mb-1 font-medium text-gray-700">Email</label>
+                <input type="email" id="signup-email" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+              </div>
+              <div>
+                <label class="block mb-1 font-medium text-gray-700">Password</label>
+                <input type="password" id="signup-password" class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+              </div>
+              <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-semibold">Create Account</button>
+            </form>
+          </div>
+          <div class="text-center py-4 text-gray-600">
+            Already have an account? 
+            <span id="toggle-auth" class="text-green-700 font-semibold cursor-pointer hover:underline">Sign in</span>
+          </div>
+        </div>
+      `;
+      setupSignupListeners();
+    }
+
+    function setupLoginListeners() {
       const loginForm = document.getElementById('login-form');
       const googleBtn = document.getElementById('google-login');
-      const signupToggle = document.getElementById('show-signup');
+      const toggleAuth = document.getElementById('toggle-auth');
 
       loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -215,14 +123,14 @@
         }
       });
 
-      signupToggle.addEventListener('click', () => {
-        showSignupForm();
+      toggleAuth.addEventListener('click', () => {
+        loadSignupForm();
       });
     }
 
-    function setupSignupForm() {
+    function setupSignupListeners() {
       const signupForm = document.getElementById('signup-form');
-      const loginToggle = document.getElementById('show-login');
+      const toggleAuth = document.getElementById('toggle-auth');
 
       signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -235,41 +143,10 @@
         }
       });
 
-      loginToggle.addEventListener('click', () => {
-        location.reload();
+      toggleAuth.addEventListener('click', () => {
+        loadLoginForm();
       });
     }
-
-    function showSignupForm() {
-      authContainer.innerHTML = `
-        <div class="auth-card">
-          <div class="auth-header">
-            <h1 class="auth-title">Create Account</h1>
-          </div>
-          <div class="auth-body">
-            <div id="auth-error" class="auth-error"></div>
-            <form id="signup-form" class="auth-form">
-              <div class="form-group">
-                <label for="signup-email" class="form-label">Email</label>
-                <input type="email" id="signup-email" class="form-input" required>
-              </div>
-              <div class="form-group">
-                <label for="signup-password" class="form-label">Password</label>
-                <input type="password" id="signup-password" class="form-input" required>
-              </div>
-              <button type="submit" class="auth-btn">Create Account</button>
-            </form>
-          </div>
-          <div class="auth-footer">
-            Already have an account? <span id="show-login" class="auth-toggle">Sign in</span>
-          </div>
-        </div>
-      `;
-      setupSignupForm();
-    }
-
-    // Initialize login form when page loads
-    setupLoginForm();
 
     // Redirect if already logged in
     onAuthStateChanged(auth, (user) => {
@@ -277,6 +154,9 @@
         window.location.href = 'index.html';
       }
     });
+
+    // Initialize
+    loadLoginForm();
   </script>
 </body>
 </html>
