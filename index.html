@@ -5,12 +5,20 @@
     <link rel="icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PanierVert</title>
-    <script>
-      window.location.href = "/index.html";
-    </script>
   </head>
   <body>
     <div id="root"></div>
-     <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.jsx"></script>
+    
+    <script type="module">
+      import { auth } from '/firebase.js';
+      import { onAuthStateChanged } from "firebase/auth";
+      
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          window.location.href = '/login.html';
+        }
+      });
+    </script>
   </body>
 </html>

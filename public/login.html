@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | PanierVert</title>
-  <!-- Load firebase.js as module -->
   <script type="module" src="/firebase.js"></script>
   <style>
     body {
@@ -28,10 +27,14 @@
     <p style="text-align:center">Loading authentication...</p>
   </div>
 
-  <!-- Proper module script for auth check -->
   <script type="module">
-    import { auth } from '/firebase.js';
+    import { auth, bindAuthForms } from '/firebase.js';
     import { onAuthStateChanged } from "firebase/auth";
+    
+    // Initialize auth UI
+    document.addEventListener('DOMContentLoaded', () => {
+      bindAuthForms();
+    });
     
     onAuthStateChanged(auth, (user) => {
       if (user) {
