@@ -1,12 +1,61 @@
-# React + Vite
+# PanierVert
+Welcome to PanierVert — an online grocery shopping platform.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a React and TailwindCSS web application that allows users to browse groceries by category (cereals, fruits, vegetables, dairy products) and securely log in using Firebase Authentication. It is built to be responsive, user-friendly, and simple to navigate.
 
-Currently, two official plugins are available:
+## Features
+Browse groceries organized by categories
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+User login and registration using email and password
 
-## Expanding the ESLint configuration
+Google account sign-in (OAuth2 via Firebase)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Protected routes based on authentication
+
+Clean and responsive design using TailwindCSS
+
+Local product data powered by JSON Server
+
+## Technologies Used
+React.js
+
+Vite.js
+
+TailwindCSS
+
+Firebase Authentication
+
+JSON Server (for mock API)
+
+## How to Run the Project Locally
+Clone the repository
+# #1
+bash
+Copy
+Edit
+git clone https://github.com/christine-muigai/panier1.git
+cd paniervert
+Install dependencies
+# #2
+bash
+Copy
+Edit
+npm install
+Start JSON Server (for product data)
+# #3
+bash
+Copy
+Edit
+npx json-server --watch db.json --port 3001
+Start the development server
+# #4
+bash
+Copy
+Edit
+npm run dev
+Access the application
+
+## License
+This project is licensed under the MIT License.
+You can view the full license text here.
+
