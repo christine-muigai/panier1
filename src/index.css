@@ -1,11 +1,14 @@
-body {
-    @apply bg-gray-50 text-gray-800;
-  }
-  
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  body {
-    background-image: url('/background.jpg');
-    background-size: cover;
-    background-position: center;
-  }
-  
+
+body {
+  @apply bg-gray-50 text-gray-800;
+}
+
+body {
+  background-image: url('/background.jpg');
+  background-size: cover;
+  background-position: center;
+}
