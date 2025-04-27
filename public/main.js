@@ -1,4 +1,4 @@
-import { auth, provider } from '../src/firebase.js';
+import { auth, provider } from 'firebase.js';
 import { signInWithPopup } from "firebase/auth";
 
 // Login button logic
