@@ -57,7 +57,7 @@ export default function Home() {
         </Link>
           
       </div>
-      <div className="flex space-x-4">
+      <div className="flex space-x-4 mt-4" >
       <Link to="/checkout">
         <button className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
           Go to Checkout
