@@ -1,30 +1,32 @@
 export default function Checkout() {
-    return (
-      <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
-        <h2 className="text-xl font-bold mb-4">Checkout</h2>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+      <div className="w-full max-w-md bg-white border rounded-lg shadow-lg p-8">
+        <h2 className="text-2xl font-bold mb-6 text-center">Checkout</h2>
         <form className="space-y-4">
           <input
             type="text"
-            placeholder="Name"
-            className="w-full border px-3 py-2 rounded"
+            placeholder="Full Name"
+            className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <input
             type="text"
-            placeholder="Address"
-            className="w-full border px-3 py-2 rounded"
+            placeholder="Shipping Address"
+            className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <input
             type="text"
-            placeholder="Payment Info"
-            className="w-full border px-3 py-2 rounded"
+            placeholder="Payment Details"
+            className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+            className="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700 transition"
           >
             Place Order
           </button>
         </form>
       </div>
-    );
-  }
+    </div>
+  );
+}
