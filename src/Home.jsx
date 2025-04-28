@@ -10,12 +10,7 @@ export default function Home() {
       <p className="text-lg md:text-xl mb-8 text-green-700 text-center">
         Fresh groceries delivered to your door!
       </p>
-      <Link to="/checkout">
-        <button className="bg-green-600 text-white px-4 py-2 rounded">
-          Go to Checkout
-        </button>
-      </Link>
-      <div className="flex space-x-4">
+     <div className="flex space-x-4">
         <Link 
           to="/category/fruits" 
           className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
@@ -62,6 +57,11 @@ export default function Home() {
         </Link>
           
       </div>
+      <Link to="/checkout">
+        <button className="bg-green-600 text-white px-4 py-2 rounded">
+          Go to Checkout
+        </button>
+      </Link>
     </div>
   );
 }
