@@ -58,7 +58,7 @@ export default function Home() {
           
       </div>
       <Link to="/checkout">
-        <button className="bg-green-600 text-white px-4 py-2 rounded">
+        <button className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
           Go to Checkout
         </button>
       </Link>
