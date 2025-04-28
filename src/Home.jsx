@@ -10,6 +10,11 @@ export default function Home() {
       <p className="text-lg md:text-xl mb-8 text-green-700 text-center">
         Fresh groceries delivered to your door!
       </p>
+      <Link to="/checkout">
+        <button className="bg-green-600 text-white px-4 py-2 rounded">
+          Go to Checkout
+        </button>
+      </Link>
       <div className="flex space-x-4">
         <Link 
           to="/category/fruits" 
