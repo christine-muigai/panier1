@@ -7,10 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",  
-     "deploy": "vercel --prod"
-
-  },
+    "preview": "vite preview", 
+    "deploy": "git add . && git commit -m 'deploy' && git push",
+     "vercel-deploy": "vercel --prod"
+    },
   "dependencies": {
     "firebase": "^11.6.1",
     "react": "^19.0.0",
