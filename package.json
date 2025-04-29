@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview", 
-    "deploy": "git add . && git commit -m 'deploy' && git push && vercel --prod",
+    "deploy": "git add . && git commit -m 'deploy' && git push && sleep 5 && xdg-open https://panier1-512e0ncke-christine-waithira-muigais-projects.vercel.app",
      "vercel-deploy": "vercel --prod"
     },
   "dependencies": {
