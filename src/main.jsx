@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { auth, onAuthStateChanged, handleLogout } from '../firebase.js';
-import Login from './Login.jsx';
+import Login from './login.jsx';
 import App from './App.jsx';
 import { CartProvider } from './CartContext';
 import './index.css';
