@@ -2,71 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.svg" />
+    <title>PanierVert</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PanierVert - Home</title>
-    <style>
-      body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-      #root {
-        min-height: 100vh;
-      }
-      button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-      }
-      button:hover {
-        background-color: #0056b3;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-
-    <!-- Firebase Auth State Check -->
     <script type="module">
-      import { auth } from '/firebase.js';
-      import { onAuthStateChanged } from "firebase/auth";
-      import { signOut } from "firebase/auth";
+      import { auth, onAuthStateChanged, handleLogout } from '/firebase.js';
 
-      const logoutBtn = document.createElement('button');
-      logoutBtn.textContent = 'Logout';
-      document.body.appendChild(logoutBtn);
+      const logoutBtn = document.getElementById('logout-btn');
 
       onAuthStateChanged(auth, (user) => {
         if (!user && window.location.pathname !== '/login.html') {
-          window.location.href = '/login.html'; // Redirect to login if not logged in
-        } else if (user && window.location.pathname === '/login.html') {
-          window.location.href = '/'; // Redirect to home if logged in
-        }
-
-        // Display logout button if logged in
-        if (user) {
-          logoutBtn.style.display = 'block';
-        } else {
-          logoutBtn.style.display = 'none';
+          window.location.href = '/login.html';
         }
       });
 
-      // Handle logout
-      logoutBtn.addEventListener('click', async () => {
+      logoutBtn?.addEventListener('click', async () => {
         try {
-          await signOut(auth);
-          window.location.href = '/login.html'; // Redirect to login after logout
+          await handleLogout();
         } catch (err) {
-          console.error('Logout failed:', err);
+          console.error('Logout error:', err.message);
         }
       });
     </script>
+  </head>
+  <body>
+    <header>
+      <button id="logout-btn">Logout</button>
+    </header>
+    <main>
+      <h1>Welcome to PanierVert 🌿</h1>
+    </main>
   </body>
 </html>
+

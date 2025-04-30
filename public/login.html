@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login | PanierVert</title>
   <style>
@@ -80,7 +79,6 @@
       border: 1px solid #ced4da;
       display: flex;
       justify-content: center;
-      align-items: center;
       gap: 0.75rem;
       margin-top: 1rem;
     }
@@ -139,10 +137,10 @@
   <script type="module">
     import {
       auth,
+      onAuthStateChanged,
       handleGoogleLogin,
       handleEmailLogin,
-      handleEmailSignUp,
-      onAuthStateChanged
+      handleEmailSignUp
     } from '/firebase.js';
 
     const errorBox = document.getElementById('auth-error');
@@ -153,6 +151,12 @@
       setTimeout(() => errorBox.style.display = 'none', 4000);
     }
 
+    // Redirect if already logged in
+    onAuthStateChanged(auth, (user) => {
+      if (user) window.location.href = '/index.html';
+    });
+
+    // Login
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value;
@@ -164,6 +168,7 @@
       }
     });
 
+    // Google login
     document.getElementById('google-login').addEventListener('click', async () => {
       try {
         await handleGoogleLogin();
@@ -172,6 +177,7 @@
       }
     });
 
+    // Toggle to signup form
     document.getElementById('toggle-auth').addEventListener('click', () => {
       const container = document.querySelector('.auth-body');
       container.innerHTML = `
@@ -198,12 +204,9 @@
         }
       });
     });
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) window.location.href = '/index.html';
-    });
   </script>
 </body>
 </html>
+
 
  

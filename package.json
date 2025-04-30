@@ -5,7 +5,7 @@
   "type": "module",
   
     "scripts": {
-      "build": "vite build",   
+      "build": "vite build && cp public/login.html dist/login.html",   
       "dev": "vite",           
       "deploy": "vercel --prod"  
     },
