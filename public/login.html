@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | PanierVert</title>
+  <script type="module" src="/firebase.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    #auth-container {
+      width: 100%;
+      max-width: 420px;
+      padding: 2rem;
+    }
+
+    .auth-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .auth-header {
+      background: #2e7d32;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .auth-title {
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    .auth-body {
+      padding: 2rem;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-input {
+      padding: 0.75rem 1rem;
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .auth-btn {
+      background: #2e7d32;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .google-btn {
+      background: white;
+      color: #495057;
+      border: 1px solid #ced4da;
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .auth-footer {
+      text-align: center;
+      padding: 1rem 2rem;
+      color: #6c757d;
+    }
+
+    .auth-toggle {
+      color: #2e7d32;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .auth-error {
+      color: #dc3545;
+      background: #f8d7da;
+      padding: 0.75rem;
+      border-radius: 6px;
+      display: none;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1 class="auth-title">Welcome to PanierVert</h1>
+      </div>
+      <div class="auth-body">
+        <div id="auth-error" class="auth-error"></div>
+        <form id="login-form" class="auth-form">
+          <div class="form-group">
+            <input type="email" id="email" class="form-input" placeholder="Email" required />
+          </div>
+          <div class="form-group">
+            <input type="password" id="password" class="form-input" placeholder="Password" required />
+          </div>
+          <button type="submit" class="auth-btn">Sign In</button>
+        </form>
+        <button id="google-login" class="auth-btn google-btn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google" />
+          Continue with Google
+        </button>
+      </div>
+      <div class="auth-footer">
+        Don't have an account? <span id="toggle-auth" class="auth-toggle">Sign up</span>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      auth,
+      handleGoogleLogin,
+      handleEmailLogin,
+      handleEmailSignUp,
+      onAuthStateChanged
+    } from '/firebase.js';
+
+    const errorBox = document.getElementById('auth-error');
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.style.display = 'block';
+      setTimeout(() => errorBox.style.display = 'none', 4000);
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      try {
+        await handleEmailLogin(email, password);
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+
+    document.getElementById('google-login').addEventListener('click', async () => {
+      try {
+        await handleGoogleLogin();
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+
+    document.getElementById('toggle-auth').addEventListener('click', () => {
+      const container = document.querySelector('.auth-body');
+      container.innerHTML = `
+        <div id="auth-error" class="auth-error"></div>
+        <form id="signup-form" class="auth-form">
+          <div class="form-group">
+            <input type="email" id="signup-email" class="form-input" placeholder="Email" required />
+          </div>
+          <div class="form-group">
+            <input type="password" id="signup-password" class="form-input" placeholder="Password" required />
+          </div>
+          <button type="submit" class="auth-btn">Create Account</button>
+        </form>
+      `;
+      document.getElementById('signup-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        try {
+          await handleEmailSignUp(email, password);
+        } catch (err) {
+          showError(err.message);
+        }
+      });
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) window.location.href = '/';
+    });
+  </script>
+</body>
+</html>

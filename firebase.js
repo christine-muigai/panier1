@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
+import {
+  getAuth,
+  GoogleAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -20,29 +20,26 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
 
 function formatAuthError(error) {
   switch (error.code) {
-    case 'auth/invalid-email': return 'Invalid email address';
-    case 'auth/user-disabled': return 'Account disabled';
+    case 'auth/invalid-email': return new Error('Invalid email address');
+    case 'auth/user-disabled': return new Error('Account disabled');
     case 'auth/user-not-found':
-    case 'auth/wrong-password': return 'Invalid email or password';
-    case 'auth/email-already-in-use': return 'Email already in use';
-    case 'auth/weak-password': return 'Password should be at least 6 characters';
-    case 'auth/popup-closed-by-user': return 'Google sign-in was canceled';
-    default: return 'Authentication failed. Please try again.';
+    case 'auth/wrong-password': return new Error('Invalid email or password');
+    case 'auth/email-already-in-use': return new Error('Email already in use');
+    case 'auth/weak-password': return new Error('Password should be at least 6 characters');
+    default: return new Error('Authentication failed. Please try again.');
   }
 }
 
 export async function handleGoogleLogin() {
   try {
-    const result = await signInWithPopup(auth, provider);
-    return result.user;
+    return await signInWithPopup(auth, provider);
   } catch (error) {
-    throw new Error(formatAuthError(error));
+    throw formatAuthError(error);
   }
 }
 
@@ -50,7 +47,7 @@ export async function handleEmailLogin(email, password) {
   try {
     return await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
-    throw new Error(formatAuthError(error));
+    throw formatAuthError(error);
   }
 }
 
@@ -58,17 +55,17 @@ export async function handleEmailSignUp(email, password) {
   try {
     return await createUserWithEmailAndPassword(auth, email, password);
   } catch (error) {
-    throw new Error(formatAuthError(error));
+    throw formatAuthError(error);
   }
 }
 
 export async function handleLogout() {
   try {
     await signOut(auth);
-    return true;
+    window.location.href = '/login.html';
   } catch (error) {
-    throw new Error('Logout failed. Please try again.');
+    console.error('Logout failed:', error);
   }
 }
 
-export { onAuthStateChanged };
+export { auth, onAuthStateChanged };

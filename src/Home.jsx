@@ -67,12 +67,5 @@ export default function Home() {
     </div>
   );
 }
-import { CartProvider } from './CartContext';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <CartProvider>
-      <App />
-    </CartProvider>
-  </StrictMode>,
-)
+
