@@ -151,10 +151,10 @@
       setTimeout(() => errorBox.style.display = 'none', 4000);
     }
 
-    // Redirect if already logged in
-    onAuthStateChanged(auth, (user) => {
-      if (user) window.location.href = '/index.html';
-    });
+onAuthStateChanged(auth, (user) => {
+  if (user) window.location.href = '/';
+});
+
 
     // Login
     document.getElementById('login-form').addEventListener('submit', async (e) => {
