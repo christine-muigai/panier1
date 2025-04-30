@@ -1,13 +1,42 @@
+import { useCart } from './CartContext';
+
 export default function Checkout() {
+  const { cartItems, clearCart } = useCart();
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (cartItems.length === 0) {
+      alert('Your cart is empty. Add some items before placing an order.');
+      return;
+    }
     alert('Order placed successfully!');
+    clearCart();
   };
+
+  const total = cartItems.reduce((sum, item) => sum + item.price, 0).toFixed(2);
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
-        <h2 className="text-xl font-bold mb-4">Checkout</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Checkout</h2>
+
+        {cartItems.length > 0 ? (
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold mb-2">Your Cart</h3>
+            <ul className="divide-y border rounded mb-2">
+              {cartItems.map((item, index) => (
+                <li key={index} className="py-2 px-3 flex justify-between items-center">
+                  <span>{item.name}</span>
+                  <span className="text-sm text-gray-700">${item.price}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-right font-semibold">Total: ${total}</p>
+          </div>
+        ) : (
+          <p className="text-center text-gray-500 mb-6">Your cart is empty.</p>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
