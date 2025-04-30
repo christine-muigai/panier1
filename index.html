@@ -1,48 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PanierVert</title>
-    <style>
-      body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-          sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-      #root {
-        min-height: 100vh;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-    
-    <script type="module">
-      import { auth, handleLogout } from '/firebase.js';
-      import { onAuthStateChanged } from "firebase/auth";
-      
-      // Make logout function available globally
-      window.handleLogout = handleLogout;
-      
-      onAuthStateChanged(auth, (user) => {
-        if (!user) {
-          // Redirect to login page with current path as redirect parameter
-          const redirect = window.location.pathname !== '/login.html' ? 
-            `?redirect=${encodeURIComponent(window.location.pathname)}` : '';
-          window.location.href = `/login.html${redirect}`;
-        } else if (user && window.location.pathname === '/login.html') {
-          // Check for redirect parameter
-          const urlParams = new URLSearchParams(window.location.search);
-          const redirectPath = urlParams.get('redirect') || '/';
-          window.location.href = redirectPath;
-        }
-      });
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PanierVert</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    #root {
+      min-height: 100vh;
+    }
+    .logout-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    .logout-btn:hover {
+      background: #1b5e20;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
 </html>

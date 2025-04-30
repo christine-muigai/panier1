@@ -1,342 +1,252 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | PanierVert</title>
-  <script type="module" src="/firebase.js"></script>
+import { useState, useEffect } from 'react';
+import { 
+  handleGoogleLogin, 
+  handleEmailLogin, 
+  handleEmailSignUp,
+  onAuthStateChanged,
+  auth
+} from '../firebase.js';
 
-  <style>
-    /* ALL YOUR EXISTING STYLES REMAIN EXACTLY THE SAME */
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f8f9fa;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+const Login = () => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-    #auth-container {
-      width: 100%;
-      max-width: 420px;
-      padding: 2rem;
-    }
-
-    .auth-card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-      overflow: hidden;
-    }
-
-    .auth-header {
-      background: #2e7d32;
-      color: white;
-      padding: 1.5rem;
-      text-align: center;
-    }
-
-    .auth-title {
-      margin: 0;
-      font-weight: 600;
-      font-size: 1.5rem;
-    }
-
-    .auth-body {
-      padding: 2rem;
-    }
-
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .form-label {
-      font-weight: 500;
-      color: #495057;
-    }
-
-    .form-input {
-      padding: 0.75rem 1rem;
-      border: 1px solid #ced4da;
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: all 0.2s;
-    }
-
-    .form-input:focus {
-      border-color: #2e7d32;
-      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.25);
-      outline: none;
-    }
-
-    .auth-btn {
-      background: #2e7d32;
-      color: white;
-      border: none;
-      padding: 0.75rem;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .auth-btn:hover {
-      background: #1b5e20;
-    }
-
-    .google-btn {
-      background: white;
-      color: #495057;
-      border: 1px solid #ced4da;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
-
-    .google-btn:hover {
-      background: #f8f9fa;
-    }
-
-    .auth-footer {
-      text-align: center;
-      padding: 1rem 2rem;
-      border-top: 1px solid #e9ecef;
-      color: #6c757d;
-    }
-
-    .auth-toggle {
-      color: #2e7d32;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    .auth-error {
-      color: #dc3545;
-      background: #f8d7da;
-      padding: 0.75rem;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-      display: none;
-    }
-
-    .auth-success {
-      color: #2e7d32;
-      background: #d4edda;
-      padding: 0.75rem;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-      display: none;
-    }
-
-    .auth-card {
-      display: block !important;
-    }
-    #auth-container {
-      display: block !important;
-    }
-  </style>
-</head>
-<body>
-  <div id="auth-container">
-    <div class="auth-card">
-      <div class="auth-header">
-        <h1 class="auth-title">Welcome to PanierVert</h1>
-      </div>
-      <div class="auth-body">
-        <div id="auth-error" class="auth-error"></div>
-        <div id="auth-success" class="auth-success"></div>
-        <form id="login-form" class="auth-form">
-          <div class="form-group">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" id="email" class="form-input" required>
-          </div>
-          <div class="form-group">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" id="password" class="form-input" required>
-          </div>
-          <button type="submit" class="auth-btn">Sign In</button>
-        </form>
-
-        <button id="google-login" class="auth-btn google-btn">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google logo">
-          Continue with Google
-        </button>
-      </div>
-      <div class="auth-footer">
-        Don't have an account? <span id="toggle-auth" class="auth-toggle">Sign up</span>
-      </div>
-    </div>
-  </div>
-
-  <script type="module">
-    import { auth, handleGoogleLogin, handleEmailLogin, handleEmailSignUp, onAuthStateChanged, handleLogout } from '/firebase.js';
-
-    function showError(message) {
-      const errorEl = document.getElementById('auth-error');
-      if (errorEl) {
-        errorEl.textContent = message;
-        errorEl.style.display = 'block';
-        setTimeout(() => {
-          errorEl.style.display = 'none';
-        }, 4000);
-      }
-    }
-
-    function showSuccess(message) {
-      const successEl = document.getElementById('auth-success');
-      if (successEl) {
-        successEl.textContent = message;
-        successEl.style.display = 'block';
-        setTimeout(() => {
-          successEl.style.display = 'none';
-        }, 4000);
-      }
-    }
-
-    // Check for logout parameter in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('logout')) {
-      showSuccess('You have been successfully logged out.');
-    }
-
-    function setupLoginListeners() {
-      const loginForm = document.getElementById('login-form');
-      const googleBtn = document.getElementById('google-login');
-      const toggleAuth = document.getElementById('toggle-auth');
-
-      if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const email = document.getElementById('email').value;
-          const password = document.getElementById('password').value;
-          try {
-            await handleEmailLogin(email, password);
-          } catch (error) {
-            showError(error.message);
-          }
-        });
-      }
-
-      if (googleBtn) {
-        googleBtn.addEventListener('click', async (e) => {
-          e.preventDefault();
-          try {
-            await handleGoogleLogin();
-          } catch (error) {
-            showError(error.message);
-          }
-        });
-      }
-
-      if (toggleAuth) {
-        toggleAuth.addEventListener('click', () => {
-          document.getElementById('auth-container').innerHTML = `
-            <div class="auth-card">
-              <div class="auth-header">
-                <h1 class="auth-title">Create Account</h1>
-              </div>
-              <div class="auth-body">
-                <div id="auth-error" class="auth-error"></div>
-                <div id="auth-success" class="auth-success"></div>
-                <form id="signup-form" class="auth-form">
-                  <div class="form-group">
-                    <label for="signup-email" class="form-label">Email</label>
-                    <input type="email" id="signup-email" class="form-input" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="signup-password" class="form-label">Password</label>
-                    <input type="password" id="signup-password" class="form-input" required>
-                  </div>
-                  <button type="submit" class="auth-btn">Create Account</button>
-                </form>
-              </div>
-              <div class="auth-footer">
-                Already have an account? <span id="toggle-auth" class="auth-toggle">Sign in</span>
-              </div>
-            </div>
-          `;
-          setupSignupListeners();
-        });
-      }
-    }
-
-    function setupSignupListeners() {
-      const signupForm = document.getElementById('signup-form');
-      const toggleAuth = document.getElementById('toggle-auth');
-
-      if (signupForm) {
-        signupForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const email = document.getElementById('signup-email').value;
-          const password = document.getElementById('signup-password').value;
-          try {
-            await handleEmailSignUp(email, password);
-          } catch (error) {
-            showError(error.message);
-          }
-        });
-      }
-
-      if (toggleAuth) {
-        toggleAuth.addEventListener('click', () => {
-          document.getElementById('auth-container').innerHTML = `
-            <div class="auth-card">
-              <div class="auth-header">
-                <h1 class="auth-title">Welcome to PanierVert</h1>
-              </div>
-              <div class="auth-body">
-                <div id="auth-error" class="auth-error"></div>
-                <div id="auth-success" class="auth-success"></div>
-                <form id="login-form" class="auth-form">
-                  <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" class="form-input" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" class="form-input" required>
-                  </div>
-                  <button type="submit" class="auth-btn">Sign In</button>
-                </form>
-                <button id="google-login" class="auth-btn google-btn">
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google logo">
-                  Continue with Google
-                </button>
-              </div>
-              <div class="auth-footer">
-                Don't have an account? <span id="toggle-auth" class="auth-toggle">Sign up</span>
-              </div>
-            </div>
-          `;
-          setupLoginListeners();
-        });
-      }
-    }
-
-    onAuthStateChanged(auth, (user) => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const urlParams = new URLSearchParams(window.location.search);
-        const redirectPath = urlParams.get('redirect') || '/index.html';
+        const redirectPath = urlParams.get('redirect') || '/';
         window.location.href = redirectPath;
       }
     });
 
-    setupLoginListeners();
-  </script>
-</body>
-</html>
+    // Check for logout notification
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('logout')) {
+      setSuccess('You have been logged out successfully.');
+    }
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (isLogin) {
+        await handleEmailLogin(email, password);
+      } else {
+        await handleEmailSignUp(email, password);
+      }
+    } catch (err) {
+      setError(err.message);
+      setTimeout(() => setError(''), 5000);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await handleGoogleLogin();
+    } catch (err) {
+      setError(err.message);
+      setTimeout(() => setError(''), 5000);
+    }
+  };
+
+  return (
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <div style={styles.header}>
+          <h1 style={styles.title}>Welcome to PanierVert</h1>
+        </div>
+        <div style={styles.body}>
+          {error && (
+            <div style={styles.error}>
+              {error}
+            </div>
+          )}
+          {success && (
+            <div style={styles.success}>
+              {success}
+            </div>
+          )}
+          <form onSubmit={handleSubmit} style={styles.form}>
+            <div style={styles.formGroup}>
+              <label htmlFor="email" style={styles.label}>Email</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={styles.input}
+                required
+                placeholder="your@email.com"
+              />
+            </div>
+            <div style={styles.formGroup}>
+              <label htmlFor="password" style={styles.label}>Password</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={styles.input}
+                required
+                placeholder="••••••••"
+              />
+            </div>
+            <button type="submit" style={styles.button}>
+              {isLogin ? 'Sign In' : 'Create Account'}
+            </button>
+          </form>
+
+          <button 
+            onClick={handleGoogleSignIn}
+            style={{ ...styles.button, ...styles.googleButton }}
+          >
+            <img 
+              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
+              width="18" 
+              alt="Google logo" 
+              style={{ marginRight: '0.75rem' }}
+            />
+            Continue with Google
+          </button>
+        </div>
+        <div style={styles.footer}>
+          {isLogin ? (
+            <>Don't have an account?{' '}
+              <span 
+                onClick={() => setIsLogin(false)} 
+                style={styles.toggle}
+              >
+                Sign up
+              </span>
+            </>
+          ) : (
+            <>Already have an account?{' '}
+              <span 
+                onClick={() => setIsLogin(true)} 
+                style={styles.toggle}
+              >
+                Sign in
+              </span>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const styles = {
+  container: {
+    fontFamily: "'Segoe UI', sans-serif",
+    background: '#f8f9fa',
+    margin: 0,
+    padding: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh'
+  },
+  card: {
+    background: 'white',
+    borderRadius: '10px',
+    boxShadow: '0 5px 15px rgba(0,0,0,0.08)',
+    overflow: 'hidden',
+    width: '100%',
+    maxWidth: '420px'
+  },
+  header: {
+    background: '#2e7d32',
+    color: 'white',
+    padding: '1.5rem',
+    textAlign: 'center'
+  },
+  title: {
+    margin: 0,
+    fontWeight: 600,
+    fontSize: '1.5rem'
+  },
+  body: {
+    padding: '2rem'
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1.25rem'
+  },
+  formGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.5rem'
+  },
+  label: {
+    fontWeight: 500,
+    color: '#495057'
+  },
+  input: {
+    padding: '0.75rem 1rem',
+    border: '1px solid #ced4da',
+    borderRadius: '6px',
+    fontSize: '1rem',
+    transition: 'all 0.2s'
+  },
+  inputFocus: {
+    borderColor: '#2e7d32',
+    boxShadow: '0 0 0 3px rgba(46, 125, 50, 0.25)',
+    outline: 'none'
+  },
+  button: {
+    background: '#2e7d32',
+    color: 'white',
+    border: 'none',
+    padding: '0.75rem',
+    borderRadius: '6px',
+    fontSize: '1rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'background 0.2s',
+    width: '100%'
+  },
+  googleButton: {
+    background: 'white',
+    color: '#495057',
+    border: '1px solid #ced4da',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '1rem'
+  },
+  footer: {
+    textAlign: 'center',
+    padding: '1rem 2rem',
+    borderTop: '1px solid #e9ecef',
+    color: '#6c757d'
+  },
+  toggle: {
+    color: '#2e7d32',
+    fontWeight: 500,
+    cursor: 'pointer',
+    textDecoration: 'underline'
+  },
+  error: {
+    color: '#dc3545',
+    background: '#f8d7da',
+    padding: '0.75rem',
+    borderRadius: '6px',
+    marginBottom: '1rem'
+  },
+  success: {
+    color: '#2e7d32',
+    background: '#d4edda',
+    padding: '0.75rem',
+    borderRadius: '6px',
+    marginBottom: '1rem'
+  }
+};
+
+export default Login;
