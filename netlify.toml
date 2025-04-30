@@ -1,0 +1,9 @@
+[build]
+  publish = "public"
+  command = "npm run build"  # Or the appropriate build command for your app (if any)
+
+[[redirects]]
+  from = "/login.html"
+  to = "/login.html"
+  status = 200
+  force = true

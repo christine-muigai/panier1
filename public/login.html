@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login | PanierVert</title>
-  <script type="module" src="/firebase.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -79,6 +80,7 @@
       border: 1px solid #ced4da;
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 0.75rem;
       margin-top: 1rem;
     }
@@ -184,6 +186,7 @@
           <button type="submit" class="auth-btn">Create Account</button>
         </form>
       `;
+
       document.getElementById('signup-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('signup-email').value;
@@ -197,8 +200,10 @@
     });
 
     onAuthStateChanged(auth, (user) => {
-      if (user) window.location.href = '/';
+      if (user) window.location.href = '/index.html';
     });
   </script>
 </body>
 </html>
+
+ 
