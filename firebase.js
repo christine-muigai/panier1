@@ -5,7 +5,8 @@ import {
   signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -53,6 +54,14 @@ export async function handleEmailLogin(email, password) {
 export async function handleEmailSignUp(email, password) {
   try {
     return await createUserWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    throw formatAuthError(error);
+  }
+}
+
+export async function handleLogout() {
+  try {
+    await signOut(auth);
   } catch (error) {
     throw formatAuthError(error);
   }

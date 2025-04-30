@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | PanierVert</title>
-  <script type="module" src="/firebase.js" defer></script>
+  <script type="module" src="/firebase.js"></script>
 
   <style>
-
+    /* ALL YOUR EXISTING STYLES REMAIN EXACTLY THE SAME */
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #f8f9fa;
@@ -134,6 +134,14 @@
       display: none;
     }
 
+    .auth-success {
+      color: #2e7d32;
+      background: #d4edda;
+      padding: 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      display: none;
+    }
 
     .auth-card {
       display: block !important;
@@ -151,6 +159,7 @@
       </div>
       <div class="auth-body">
         <div id="auth-error" class="auth-error"></div>
+        <div id="auth-success" class="auth-success"></div>
         <form id="login-form" class="auth-form">
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
@@ -175,7 +184,7 @@
   </div>
 
   <script type="module">
-    import { auth, handleGoogleLogin, handleEmailLogin, handleEmailSignUp, onAuthStateChanged } from '/firebase.js';
+    import { auth, handleGoogleLogin, handleEmailLogin, handleEmailSignUp, onAuthStateChanged, handleLogout } from '/firebase.js';
 
     function showError(message) {
       const errorEl = document.getElementById('auth-error');
@@ -186,6 +195,23 @@
           errorEl.style.display = 'none';
         }, 4000);
       }
+    }
+
+    function showSuccess(message) {
+      const successEl = document.getElementById('auth-success');
+      if (successEl) {
+        successEl.textContent = message;
+        successEl.style.display = 'block';
+        setTimeout(() => {
+          successEl.style.display = 'none';
+        }, 4000);
+      }
+    }
+
+    // Check for logout parameter in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('logout')) {
+      showSuccess('You have been successfully logged out.');
     }
 
     function setupLoginListeners() {
@@ -226,6 +252,7 @@
               </div>
               <div class="auth-body">
                 <div id="auth-error" class="auth-error"></div>
+                <div id="auth-success" class="auth-success"></div>
                 <form id="signup-form" class="auth-form">
                   <div class="form-group">
                     <label for="signup-email" class="form-label">Email</label>
@@ -274,6 +301,7 @@
               </div>
               <div class="auth-body">
                 <div id="auth-error" class="auth-error"></div>
+                <div id="auth-success" class="auth-success"></div>
                 <form id="login-form" class="auth-form">
                   <div class="form-group">
                     <label for="email" class="form-label">Email</label>
@@ -302,7 +330,9 @@
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        window.location.href = '/index.html';
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectPath = urlParams.get('redirect') || '/index.html';
+        window.location.href = redirectPath;
       }
     });
 

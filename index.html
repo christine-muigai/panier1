@@ -24,14 +24,23 @@
     <script type="module" src="/src/main.jsx"></script>
     
     <script type="module">
-      import { auth } from '/firebase.js';
+      import { auth, handleLogout } from '/firebase.js';
       import { onAuthStateChanged } from "firebase/auth";
       
+      // Make logout function available globally
+      window.handleLogout = handleLogout;
+      
       onAuthStateChanged(auth, (user) => {
-        if (!user && window.location.pathname !== '/login.html') {
-          window.location.href = '/login.html';
+        if (!user) {
+          // Redirect to login page with current path as redirect parameter
+          const redirect = window.location.pathname !== '/login.html' ? 
+            `?redirect=${encodeURIComponent(window.location.pathname)}` : '';
+          window.location.href = `/login.html${redirect}`;
         } else if (user && window.location.pathname === '/login.html') {
-          window.location.href = '/';
+          // Check for redirect parameter
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirectPath = urlParams.get('redirect') || '/';
+          window.location.href = redirectPath;
         }
       });
     </script>
