@@ -46,9 +46,9 @@ const Root = () => {
 };
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <StrictMode>
     <Root />
-  </React.StrictMode>
+  </StrictMode>
 );
 createRoot(document.getElementById('root')).render(
   <StrictMode>
