@@ -1,4 +1,5 @@
-import { initializeApp } from "firebase/app";
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -7,16 +8,16 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut
-} from "firebase/auth";
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_API_KEY,
-  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_APP_ID,
-  measurementId: import.meta.env.VITE_MEASUREMENT_ID
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID",
+  measurementId: "YOUR_MEASUREMENT_ID"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -35,37 +36,10 @@ function formatAuthError(error) {
   }
 }
 
-export async function handleGoogleLogin() {
-  try {
-    return await signInWithPopup(auth, provider);
-  } catch (error) {
-    throw formatAuthError(error);
-  }
-}
+window.auth = auth;
+window.onAuthStateChanged = onAuthStateChanged;
+window.handleGoogleLogin = () => signInWithPopup(auth, provider).catch(e => { throw formatAuthError(e); });
+window.handleEmailLogin = (email, password) => signInWithEmailAndPassword(auth, email, password).catch(e => { throw formatAuthError(e); });
+window.handleEmailSignUp = (email, password) => createUserWithEmailAndPassword(auth, email, password).catch(e => { throw formatAuthError(e); });
+window.handleLogout = () => signOut(auth).then(() => window.location.href = '/login.html');
 
-export async function handleEmailLogin(email, password) {
-  try {
-    return await signInWithEmailAndPassword(auth, email, password);
-  } catch (error) {
-    throw formatAuthError(error);
-  }
-}
-
-export async function handleEmailSignUp(email, password) {
-  try {
-    return await createUserWithEmailAndPassword(auth, email, password);
-  } catch (error) {
-    throw formatAuthError(error);
-  }
-}
-
-export async function handleLogout() {
-  try {
-    await signOut(auth);
-    window.location.href = '/login.html';
-  } catch (error) {
-    console.error('Logout failed:', error);
-  }
-}
-
-export { auth, onAuthStateChanged };
