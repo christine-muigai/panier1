@@ -1,16 +1,15 @@
-// firebase.js - Place this in your public folder
+// public/firebase.js
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
+import {
+  getAuth,
+  GoogleAuthProvider,
   signInWithPopup,
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
-// Replace with your actual Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBq1MSSFZhh9nGzzS_0dypa3kmZd-fIdZw",
   authDomain: "panier-50ae4.firebaseapp.com",
@@ -21,21 +20,27 @@ const firebaseConfig = {
   measurementId: "G-K03B8HFLFH"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 function formatAuthError(error) {
   switch (error.code) {
-    case 'auth/invalid-email': return new Error('Invalid email address.');
-    case 'auth/user-disabled': return new Error('Account disabled.');
+    case 'auth/invalid-email':
+      return new Error('Invalid email address.');
+    case 'auth/user-disabled':
+      return new Error('This account has been disabled.');
     case 'auth/user-not-found':
-    case 'auth/wrong-password': return new Error('Incorrect email or password.');
-    case 'auth/email-already-in-use': return new Error('Email already registered.');
-    case 'auth/weak-password': return new Error('Password should be at least 6 characters.');
-    case 'auth/popup-closed-by-user': return new Error('Sign in popup was closed.');
-    default: return new Error('Authentication failed. Please try again.');
+    case 'auth/wrong-password':
+      return new Error('Incorrect email or password.');
+    case 'auth/email-already-in-use':
+      return new Error('Email already in use.');
+    case 'auth/weak-password':
+      return new Error('Password should be at least 6 characters.');
+    case 'auth/popup-closed-by-user':
+      return new Error('Google sign-in was cancelled.');
+    default:
+      return new Error('Authentication failed.');
   }
 }
 
@@ -68,7 +73,7 @@ export async function handleLogout() {
     await signOut(auth);
     window.location.href = '/login.html';
   } catch (error) {
-    console.error('Logout failed:', error);
+    console.error('Logout error:', error.message);
   }
 }
 

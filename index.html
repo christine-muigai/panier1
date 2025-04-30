@@ -4,33 +4,22 @@
     <meta charset="UTF-8" />
     <title>PanierVert</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src="/firebase.js"></script>
     <script type="module">
-      window.addEventListener('DOMContentLoaded', () => {
-        const logoutBtn = document.getElementById('logout-btn');
-
-        window.onAuthStateChanged(window.auth, (user) => {
-          if (!user && window.location.pathname !== '/login.html') {
-            window.location.href = '/login.html';
-          }
-        });
-
-        logoutBtn?.addEventListener('click', async () => {
-          try {
-            await window.handleLogout();
-          } catch (err) {
-            console.error('Logout error:', err.message);
-          }
-        });
+      import { auth, onAuthStateChanged } from './public/firebase.js';
+      onAuthStateChanged(auth, (user) => {
+        if (!user) window.location.href = '/login.html';
       });
     </script>
   </head>
   <body>
-    <header>
-      <button id="logout-btn">Logout</button>
-    </header>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <h1>Welcome to PanierVert</h1>
+    <button onclick="logout()">Logout</button>
+    <script type="module">
+      import { handleLogout } from './public/firebase.js';
+      window.logout = handleLogout;
+    </script>
+     <div id="root"></div>
+     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
 
