@@ -1,0 +1,18 @@
+{
+    "builds": [
+      {
+        "src": "public/**",
+        "use": "@vercel/static"
+      },
+      {
+        "src": "src/firebase.js",
+        "use": "@vercel/static"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/src/firebase.js",
+        "dest": "/src/firebase.js"
+      }
+    ]
+  }
