@@ -5,7 +5,7 @@
     <title>PanierVert</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module">
-      import { auth, onAuthStateChanged } from './public/firebase.js';
+      import { auth, onAuthStateChanged } from '/firebase.js';
       onAuthStateChanged(auth, (user) => {
         if (!user) window.location.href = '/login.html';
       });
@@ -15,7 +15,7 @@
     <h1>Welcome to PanierVert</h1>
     <button onclick="logout()">Logout</button>
     <script type="module">
-      import { handleLogout } from './public/firebase.js';
+      import { handleLogout } from '/firebase.js';
       window.logout = handleLogout;
     </script>
      <div id="root"></div>
